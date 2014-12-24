@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jsp:root 
+    xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+    <script type="text/javascript">
+        function del(a) {
+            if (a == 1) {
+                document.getElementById('upload').style.visibility = "visible";
+                document.getElementById('subm').style.visibility = "visible";
+            } else
+            if (a == 2) {
+                document.getElementById('upload').style.visibility = "hidden";
+                document.getElementById('subm').style.visibility = "hidden";
+                if (confirm('Are you sure you want to delete the database?')) {
+                    xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open("GET", "webresources/delete", "false");
+                    xmlhttp.send();
+                    xmlDoc = xmlhttp.responseXML;
+                    document.getElementById("table1").innerHTML = "";
+                }
+            }
+        }
+    </script>
+
+    <jsp:directive.page contentType="text/html" pageEncoding="UTF-8"/>
+    <jsp:element name="text">
+        <jsp:attribute name="lang">EN</jsp:attribute>
+        <jsp:body>Tournament</jsp:body>
+    </jsp:element>
+       
+    <select onchange="del(this.value)">
+        <option value="empty">Select one action</option>
+        <option value="1">Upload a Tournament</option>
+        <option value="2">Delete Database</option>
+    </select>
+         <a href="resources/samples.zip">Examples</a>
+    <form action="upload" method="post" enctype="multipart/form-data">
+
+        <input id="upload" name="file" type="file" style="visibility:hidden"/>
+        <input id="subm" type="submit" value="Submit" style="visibility:hidden"/>
+    </form>
+    <jsp:useBean id="places" class="main.PlacesBean" scope="request"/>
+    <table style="width:25%; border:1" id="table1">
+        <tr>
+            <td>Name</td>
+            <td>Points</td>
+        </tr>
+        <c:forEach var="entry" items="${places.places}">
+            <tr sytel="border:1">
+                <td><c:out value="${entry.key}"/></td>
+                <td><c:out value="${entry.value}"/></td> 
+            </tr>
+        </c:forEach>
+    </table>
+</jsp:root>
